@@ -96,9 +96,9 @@ function Room() {
 
     const handlePlayerStateChange = ({ target, data }) => {
         console.log("yd state change hit");
-        if (!userIsHost) {
-            return;
-        }
+        // if (!userIsHost) {
+        //     return;
+        // }
         switch (data) {
             case 1:
                 socket.emit(
