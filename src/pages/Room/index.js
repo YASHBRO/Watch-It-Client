@@ -38,7 +38,9 @@ function Room() {
 
     const pathParams = useParams();
 
-    const socket = useRef(io.connect("http://localhost:3000")).current;
+    const socket = useRef(
+        io.connect(process.env.REACT_APP_SERVER_URL || "http://localhost:3000")
+    ).current;
 
     useEffect(() => {
         socket.on("connect", () => {
@@ -96,9 +98,9 @@ function Room() {
 
     const handlePlayerStateChange = ({ target, data }) => {
         console.log("yd state change hit");
-        // if (!userIsHost) {
-        //     return;
-        // }
+        if (!(userIsHost || roomDetails.guestControl)) {
+            return;
+        }
         switch (data) {
             case 1:
                 socket.emit(
