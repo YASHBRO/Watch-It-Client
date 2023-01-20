@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    background-color: #101010cc;
+    border-radius: 1rem;
+    pointer-events: none;
+    user-select: none;
+}
+
+.logoText {
+    font-size: clamp(2rem, 6vw, 6rem);
+}
+
+/* Comment for pHub effect */
+.logoText {
+    font-family: "Bungee", cursive;
+
+    color: #760307;
+    background-image: -webkit-linear-gradient(135deg, #760307 0%, #ef2b6b 78%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logoImg {
+    width: 8rem;
+    aspect-ratio: 1;
+}
+
+/* Comment for normal all below this */
+/* .logoText {
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+}
+
+.leftText {
+    color: #f0f0f0;
+}
+
+.rightText {
+    padding-inline: 1rem;
+    position: relative;
+    z-index: 5;
+    color: #0f0f0f;
+}
+
+.rightText::after {
+    content: "";
+    background-color: #e69420;
+    position: absolute;
+    inset: 0;
+    z-index: -5;
+    border-radius: 0.75rem;
+} */

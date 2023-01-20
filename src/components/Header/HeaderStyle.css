@@ -1,0 +1,4 @@
+.logo {
+    width: clamp(50px, 5vw, 75px);
+    margin-right: 1rem;
+}
