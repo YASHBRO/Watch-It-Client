@@ -96,7 +96,7 @@ function Room() {
 
     const handlePlayerStateChange = ({ target, data }) => {
         console.log("yd state change hit");
-        if (!(userIsHost || roomDetails.guestControl)) {
+        if (!userIsHost) {
             return;
         }
         switch (data) {
