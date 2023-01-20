@@ -18,7 +18,7 @@ function Login() {
         if (localUserId) {
             user.setUserId(localUserId);
             user.setIsLoggedIn(true);
-            navigate(-1);
+            navigate(0);
         }
     }, [navigate, user]);
 
