@@ -28,7 +28,7 @@ function Login() {
         user.setUserId(userId);
         user.setIsLoggedIn(true);
         localStorage.setItem("UserId", userId);
-        navigate("/")
+        navigate("/");
     };
 
     const handleLogin = (body) => {
@@ -39,7 +39,7 @@ function Login() {
                 }
             })
             .catch((err) => {
-                console.error("yd", err);
+                console.error("yd login err", err);
             });
     };
 
@@ -51,16 +51,19 @@ function Login() {
                 }
             })
             .catch((err) => {
-                console.error("yd", err);
+                console.error("yd register err", err);
             });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const user = { email: e.target[0].value, password: e.target[2].value };
+        const user = {
+            email: e.target.elements["email"].value,
+            password: e.target.elements["password"].value,
+        };
 
         if (!isLogin) {
-            if (user.password !== e.target[4].value) {
+            if (user.password !== e.target.elements["confirmPassword"].value) {
                 alert("Confirmation password doesn't match");
                 return;
             }
