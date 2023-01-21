@@ -7,41 +7,38 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./HeaderStyle.css";
-
-const pages = [
-    { label: "Rooms", href: "/rooms" },
-    { label: "About", href: "/about" },
-    { label: "Login", href: "/login" },
-];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const watchItLogo = require("../../assets/image/logo.png");
 
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    const navigate = useNavigate();
+
+    const pages = [
+        { label: "Rooms", href: "/rooms" },
+        { label: "About", href: "/about" },
+        {
+            label: "Log Out",
+            href: "/login",
+            onClick: () => {
+                localStorage.removeItem("UserId");
+                navigate("/login");
+            },
+        },
+    ];
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
     };
 
     return (
@@ -108,6 +105,11 @@ const Header = () => {
                                         component={Link}
                                         to={page.href}
                                         textAlign="center"
+                                        onClick={(e) => {
+                                            if (page?.onClick) {
+                                                page.onClick(e);
+                                            }
+                                        }}
                                     >
                                         {page.label}
                                     </Typography>
@@ -149,50 +151,15 @@ const Header = () => {
                                 component={Link}
                                 to={page.href}
                                 sx={{ my: 2, color: "white", display: "block" }}
+                                onClick={(e) => {
+                                    if (page?.onClick) {
+                                        page.onClick(e);
+                                    }
+                                }}
                             >
                                 {page.label}
                             </Button>
                         ))}
-                    </Box>
-
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton
-                                onClick={handleOpenUserMenu}
-                                sx={{ p: 0 }}
-                            >
-                                <Avatar>
-                                    <PermIdentityIcon />
-                                </Avatar>
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: "45px" }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem
-                                    key={setting}
-                                    onClick={handleCloseUserMenu}
-                                >
-                                    <Typography textAlign="center">
-                                        {setting}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
                     </Box>
                 </Toolbar>
             </Container>
