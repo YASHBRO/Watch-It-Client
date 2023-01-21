@@ -102,6 +102,16 @@ function Room() {
     const handlePlayerStateChange = ({ target, data }) => {
         console.log("yd state change hit");
         if (!(userIsHost || roomDetails.guestControl)) {
+            switch (data) {
+                case 1:
+                    videoPlayerRef.current.pauseVideo();
+                    break;
+                case 2:
+                    videoPlayerRef.current.playVideo();
+                    break;
+                default:
+                    break;
+            }
             return;
         }
         switch (data) {
@@ -128,6 +138,7 @@ function Room() {
                 break;
 
             default:
+                console.log("yd no state matched");
                 break;
         }
     };
