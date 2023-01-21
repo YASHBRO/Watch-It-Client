@@ -14,6 +14,7 @@ import { io } from "socket.io-client";
 import { UserContext } from "../../context/User";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { UpdateRoomApi } from "./api";
+import { BASE_URL } from "../../constants/API";
 
 const resetRoomDetails = {
     _id: null,
@@ -38,9 +39,7 @@ function Room() {
 
     const pathParams = useParams();
 
-    const socket = useRef(
-        io.connect(process.env.REACT_APP_SERVER_URL || "http://localhost:3000")
-    ).current;
+    const socket = useRef(io.connect(BASE_URL)).current;
 
     useEffect(() => {
         socket.on("connect", () => {
