@@ -41,13 +41,17 @@ function Room() {
 
     const socket = useRef(io.connect(BASE_URL)).current;
 
+    socket.on("disconnect", () => {
+        console.log("yd socket disconnected");
+    });
+
     useEffect(() => {
         socket.on("connect", () => {
             console.log("yd connected", socket.id);
         });
-        socket.on("disconnect", () => {
-            console.log("yd socket disconnected");
-        });
+        return () => {
+            socket.disconnect();
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
