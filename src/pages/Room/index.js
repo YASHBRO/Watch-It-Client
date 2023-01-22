@@ -15,6 +15,7 @@ import { UserContext } from "../../context/User";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { UpdateRoomApi } from "./api";
 import { BASE_URL } from "../../constants/API";
+import ChatBox from "./ChatBox";
 
 const resetRoomDetails = {
     _id: null,
@@ -26,13 +27,15 @@ const resetRoomDetails = {
     roomCode: null,
 };
 
-const resetCurrentVideoStats = { videoId: "" };
+const resetCurrentVideoStats = { videoId: "", videoTitle: "" };
 
 function Room() {
     const [roomDetails, setRoomDetails] = useState(resetRoomDetails);
     const [isLoading, setIsLoading] = useState(false);
 
-    const currentVideoStatsRef = useRef(resetCurrentVideoStats);
+    const [currentVideoStatsRef, setCurrentVideoStatsRef] = useState(
+        resetCurrentVideoStats
+    );
     const videoPlayerRef = useRef();
 
     const socket = useRef(io.connect(BASE_URL)).current;
@@ -59,7 +62,7 @@ function Room() {
                 setRoomDetails(res.data.result);
             })
             .catch((err) => {
-                console.log("yd", err);
+                console.log("yd get-room", err);
             });
     }
 
@@ -73,8 +76,10 @@ function Room() {
     useEffect(() => {
         if (roomDetails?.currentVideo) {
             const videoUrl = new URL(roomDetails?.currentVideo);
-            currentVideoStatsRef.current.videoId =
-                videoUrl.searchParams.get("v");
+            setCurrentVideoStatsRef((prev) => ({
+                ...prev,
+                videoId: videoUrl.searchParams.get("v"),
+            }));
         }
         handleJoinRoom();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +98,7 @@ function Room() {
     };
 
     const handlePlayerStateChange = ({ target, data }) => {
-        console.log("yd state change hit");
+        // console.log("yd state change hit");
         console.log(
             "yd",
             userIsHost || roomDetails.guestControl,
@@ -101,7 +106,7 @@ function Room() {
             roomDetails.guestControl
         );
         if (!(userIsHost || roomDetails.guestControl)) {
-            console.log("yd state change not allowed");
+            // console.log("yd state change not allowed");
 
             // switch (data) {
             //     case 1:
@@ -118,7 +123,7 @@ function Room() {
 
         switch (data) {
             case 1:
-                console.log("yd play state");
+                // console.log("yd play state");
                 socket.emit(
                     "play-video",
                     roomDetails?._id,
@@ -126,7 +131,7 @@ function Room() {
                 );
                 break;
             case 2:
-                console.log("yd pause state");
+                // console.log("yd pause state");
                 socket.emit(
                     "pause-video",
                     roomDetails?._id,
@@ -142,21 +147,21 @@ function Room() {
                 break;
 
             default:
-                console.log("yd no state matched");
+                // console.log("yd no state matched");
                 break;
         }
     };
 
     socket.on("seek-to", (timestamp) => {
-        console.log("yd", "seek to :", timestamp);
+        // console.log("yd", "seek to :", timestamp);
         playerTimeSeekTo(timestamp);
     });
     socket.on("pause-at", (timestamp) => {
-        console.log("yd", "pause at :", timestamp);
+        // console.log("yd", "pause at :", timestamp);
         playerTimePauseAt(timestamp);
     });
     socket.on("buffer-at", (timestamp) => {
-        console.log("yd", "buffer at :", timestamp);
+        // console.log("yd", "buffer at :", timestamp);
         playerTimePauseAt(timestamp);
     });
     socket.on("get-room-details", (timestamp) => {
@@ -192,18 +197,23 @@ function Room() {
                 lg={8}
                 sx={{
                     aspectRatio: "16/9",
-                }}
-                onClick={() => {
-                    console.log("yd clicked");
+                    mx: "calc(0rem + 2vw)",
                 }}
             >
+                <Typography variant="h5" sx={{ color: "#dfdfdf", mb: 2 }}>
+                    : {currentVideoStatsRef?.videoTitle}
+                </Typography>
                 <YouTube
                     ref={videoPlayerRef}
-                    videoId={currentVideoStatsRef.current.videoId}
+                    videoId={currentVideoStatsRef.videoId}
                     style={{ height: "100%" }}
                     onStateChange={handlePlayerStateChange}
                     onReady={({ target }) => {
                         videoPlayerRef.current = target;
+                        setCurrentVideoStatsRef((prev) => ({
+                            ...prev,
+                            videoTitle: target?.videoTitle,
+                        }));
                     }}
                     opts={{
                         width: "100%",
@@ -220,7 +230,7 @@ function Room() {
                 />
             </Grid>
             {userIsHost ? (
-                <Grid item xs={5} minWidth="300px">
+                <Grid item lg={4} md={5} xs={10} minWidth="300px">
                     <Paper
                         elevation={3}
                         sx={{
@@ -291,6 +301,7 @@ function Room() {
                     </Paper>
                 </Grid>
             ) : null}
+            <ChatBox />
         </Grid>
     );
 }
