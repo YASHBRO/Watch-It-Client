@@ -36,15 +36,13 @@ function Rooms() {
                 height: "75vh",
             }}
         >
-            <Paper elavation={3}>
+            <Paper elavation={3} sx={{ height: "45vh" }}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs
                         value={tabValue}
                         onChange={(_e, newValue) => {
                             setTabValue(newValue);
                         }}
-                        aria-label="basic tabs example"
-                        style={{ backgroundColor: "#f6f6f6" }}
                     >
                         <Tab label="Create" {...a11yProps(0)} />
                         <Tab label="Join" {...a11yProps(1)} />

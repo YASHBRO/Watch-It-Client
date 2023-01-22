@@ -35,27 +35,25 @@ function Room() {
     const currentVideoStatsRef = useRef(resetCurrentVideoStats);
     const videoPlayerRef = useRef();
 
+    const socket = useRef(io.connect(BASE_URL)).current;
+
     const { userId } = useContext(UserContext);
 
     const pathParams = useParams();
 
-    const socket = useRef(io.connect(BASE_URL)).current;
+    useEffect(() => {
+        handleGetRoomDetails();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
+    socket.on("connect", () => {
+        console.log("yd connected", socket.id);
+    });
     socket.on("disconnect", () => {
         console.log("yd socket disconnected");
     });
 
-    useEffect(() => {
-        socket.on("connect", () => {
-            console.log("yd connected", socket.id);
-        });
-        return () => {
-            socket.disconnect();
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const handleGetRoomDetails = () => {
+    function handleGetRoomDetails() {
         SecureAxios(`get-room/${pathParams.roomCode}`)
             .then((res) => {
                 setRoomDetails(res.data.result);
@@ -63,12 +61,7 @@ function Room() {
             .catch((err) => {
                 console.log("yd", err);
             });
-    };
-
-    useEffect(() => {
-        handleGetRoomDetails();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }
 
     const handleJoinRoom = () => {
         if (roomDetails._id === null) {
@@ -101,21 +94,31 @@ function Room() {
 
     const handlePlayerStateChange = ({ target, data }) => {
         console.log("yd state change hit");
+        console.log(
+            "yd",
+            userIsHost || roomDetails.guestControl,
+            userIsHost,
+            roomDetails.guestControl
+        );
         if (!(userIsHost || roomDetails.guestControl)) {
-            switch (data) {
-                case 1:
-                    videoPlayerRef.current.pauseVideo();
-                    break;
-                case 2:
-                    videoPlayerRef.current.playVideo();
-                    break;
-                default:
-                    break;
-            }
+            console.log("yd state change not allowed");
+
+            // switch (data) {
+            //     case 1:
+            //         videoPlayerRef.current.pauseVideo();
+            //         break;
+            //     case 2:
+            //         videoPlayerRef.current.playVideo();
+            //         break;
+            //     default:
+            //         break;
+            // }
             return;
         }
+
         switch (data) {
             case 1:
+                console.log("yd play state");
                 socket.emit(
                     "play-video",
                     roomDetails?._id,
@@ -123,6 +126,7 @@ function Room() {
                 );
                 break;
             case 2:
+                console.log("yd pause state");
                 socket.emit(
                     "pause-video",
                     roomDetails?._id,
@@ -179,13 +183,18 @@ function Room() {
             justifyContent="center"
             alignItems="center"
             spacing={3}
-            sx={{ height: "85vh", paddingBlock: 3, marginBottom: 4 }}
+            sx={{ paddingTop: 4, marginBottom: 2 }}
         >
             <Grid
                 item
-                xs={8}
+                xs={12}
+                md={10}
+                lg={8}
                 sx={{
                     aspectRatio: "16/9",
+                }}
+                onClick={() => {
+                    console.log("yd clicked");
                 }}
             >
                 <YouTube
@@ -211,7 +220,7 @@ function Room() {
                 />
             </Grid>
             {userIsHost ? (
-                <Grid item xs={5}>
+                <Grid item xs={5} minWidth="300px">
                     <Paper
                         elevation={3}
                         sx={{

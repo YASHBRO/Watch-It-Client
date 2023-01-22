@@ -66,6 +66,7 @@ export function JoinRoom() {
                 loadingPosition="start"
                 variant="contained"
                 startIcon={<AddIcon />}
+                color="secondary"
                 sx={{
                     mt: 2,
                 }}

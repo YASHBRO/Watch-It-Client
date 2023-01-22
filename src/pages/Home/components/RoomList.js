@@ -42,8 +42,7 @@ function RoomList(props) {
             justifyContent="center"
             alignItems="center"
             alignContent="center"
-            xs={11}
-            sx={{ mx: "auto", my: 1 }}
+            sx={{ mx: "auto", my: 1, width: "90%" }}
         >
             {allRooms.map((room, ind) => (
                 <Grid item key={ind} xl={3} md={4} sm={6} xs={12}>

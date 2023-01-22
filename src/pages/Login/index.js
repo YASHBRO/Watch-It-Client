@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { UserContext } from "../../context/User";
 import { UserLoginApi, UserRegisterApi } from "./api";
+import { grey } from "@mui/material/colors";
 
 function Login() {
     const [isLogin, setIsLogin] = useState(true);
@@ -80,10 +81,11 @@ function Login() {
         <Box
             sx={{
                 width: "100%",
-                height: "100%",
+                height: "100vh",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                backgroundColor: grey[800],
             }}
         >
             <Paper

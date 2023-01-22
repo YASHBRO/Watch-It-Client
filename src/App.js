@@ -5,6 +5,9 @@ import AppRouter from "./router";
 import { UserContext } from "./context/User";
 import { useState } from "react";
 
+import { ThemeProvider } from "@mui/material/styles";
+import { AppTheme } from "./theme";
+
 function App() {
     const [userId, setUserId] = useState();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,9 +16,11 @@ function App() {
         <UserContext.Provider
             value={{ userId, setUserId, isLoggedIn, setIsLoggedIn }}
         >
-            <BrowserRouter>
-                <AppRouter />
-            </BrowserRouter>
+            <ThemeProvider theme={AppTheme}>
+                <BrowserRouter>
+                    <AppRouter />
+                </BrowserRouter>
+            </ThemeProvider>
         </UserContext.Provider>
     );
 }

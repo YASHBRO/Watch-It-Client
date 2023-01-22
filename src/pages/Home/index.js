@@ -4,6 +4,7 @@ import "./HomeStyle.css";
 import GetAllRoomsApi from "./api";
 import HomeLogo from "../../components/MainLogo";
 import RoomList from "./components/RoomList";
+import { grey } from "@mui/material/colors";
 
 const homeBgVideo = require("../../assets/videos/homeBackground.mp4");
 
@@ -14,6 +15,10 @@ function Home() {
         GetAllRoomsApi().then((res) => {
             setAllRooms(res.data.result);
         });
+        document.body.style.backgroundColor = "transparent";
+        return () => {
+            document.body.style.backgroundColor = grey[800];
+        };
     }, []);
 
     const BackgroundVideo = () => (
@@ -28,7 +33,7 @@ function Home() {
     );
 
     return (
-        <Box>
+        <Box sx={{ mb: 5 }}>
             <BackgroundVideo />
             <Box
                 sx={{
